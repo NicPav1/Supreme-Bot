@@ -10,3 +10,5 @@ How it works:
 3) The bot navigates through the steps of finding the item on the website, adding to cart, clicking checkout, inputting all user information into the text fields, agreeing to the terms of agreement, and finally purchasing.
 
 In the future I want to make the bot faster by using requests instead of web automation.
+
+**CURRENTLY CANNOT PASS CAPTCHA. EXIT FROM SELENIUM AND SOLVE CAPTCHA MANUALLY**
