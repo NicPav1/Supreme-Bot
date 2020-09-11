@@ -3,7 +3,6 @@ import json
 from urllib.request import urlopen
 import requests
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -39,31 +38,31 @@ sesh = requests.Session()
 #Categories: Accessories, Hats, Pants, Sweatshirts, Shorts, Bags, Tops/Sweaters, Jackets, Shoes, Shirts
 items = obj["products_and_categories"]["Shirts"]
 
+#Finds the item_id to open the item's variants
 index = 0
 item_id = 0
 for i in items:
         if(itm_name in items[index]["name"]):
-                found_url = i["image_url"]
                 item_id = i['id']
                 break
         index += 1
 
-#link = found_url.replace("ca","vi")
+#Gets the item variants from the mobile website
 item_variants = requests.get(f'https://www.supremenewyork.com/shop/{item_id}.json').json()
 
-#obj2 = json.load(url2)
 styles = item_variants['styles']
 size_id = 0
 style_id = 0
 
-for s in styles:
-        if s['name'] == color:
-                sizes = s['sizes']
-                style_id = s['id']
-
-for s in sizes:
-        if s['name'] == size:
-                size_id = s['id']
+for sty in styles:
+        if sty['name'] == color:
+                sizes = sty['sizes']
+                for siz in sizes:
+                        if siz['name'] == size:
+                                size_id = siz['id']
+                                break
+                style_id = sty['id']
+                break
 
 
 atc_url = f"https://www.supremenewyork.com/shop/{item_id}/add.json"
