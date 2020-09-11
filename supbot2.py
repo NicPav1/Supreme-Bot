@@ -94,7 +94,7 @@ if atc_post.json():
         if atc_post.json()['cart'][0]["in_stock"]:
                 print(colored("Added to Cart", "blue"))
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome()
 driver.get('https://www.supremenewyork.com')
 for x, y in zip(list(cookies.keys()), list(cookies.values())):
         driver.add_cookie({'name': x, 'value': y})
