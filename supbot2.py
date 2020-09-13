@@ -1,5 +1,4 @@
 import json
-import time
 import requests
 import sys
 from selenium import webdriver
@@ -8,20 +7,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 #Enter a keyword for the item (Nike is an example)
-itm_name = 'Camo'
+itm_name = 'Badge'
 
 #Enter color for item
-color = 'Royal'
+color = 'Blue'
 
-#Enter size for item
-size = 'Medium'
+#Enter size for item. Leave empty for an accessory with no sizes
+size = ''
+
+#Categories: Accessories, Hats, Pants, Sweatshirts, Shorts, Bags, Tops/Sweaters, Jackets, Shoes, Shirts
+category = 'Accessories'
 
 #Loads Supreme JSON website into an object
 stock = requests.get("https://www.supremenewyork.com/mobile_stock.json").json() 
 sesh = requests.Session()
 
-#Categories: Accessories, Hats, Pants, Sweatshirts, Shorts, Bags, Tops/Sweaters, Jackets, Shoes, Shirts
-items = stock["products_and_categories"]["Shirts"]
+#We only want to iterate through the necessary category to save time
+items = stock["products_and_categories"][category]
 
 #Finds the item_id to open the item's variants
 item_id = 0
