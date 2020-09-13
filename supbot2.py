@@ -1,51 +1,37 @@
-import selenium
 import json
-from urllib.request import urlopen
 import requests
+import sys
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import time
-from termcolor import colored
-import sys
 
 #Enter a keyword for the item (Nike is an example)
-itm_name = 'Camo'
+itm_name = 'Badge'
 
 #Enter color for item
-color = 'Royal'
+color = 'Blue'
 
-#Enter size for item
-size = 'Medium'
-
-#Loads Supreme JSON website into an object
-url = "https://www.supremenewyork.com/mobile_stock.json"
-headers = {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/80.0.3987.95 Mobile/15E148 Safari/604.1",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "DNT": "1",
-        "Connection": "close",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
-        "TE": "Trailers"
-}
-obj = requests.get(url, headers=headers).json() 
-sesh = requests.Session()
+#Enter size for item. Leave empty for an accessory with no sizes
+size = ''
 
 #Categories: Accessories, Hats, Pants, Sweatshirts, Shorts, Bags, Tops/Sweaters, Jackets, Shoes, Shirts
-items = obj["products_and_categories"]["Shirts"]
+category = 'Accessories'
+
+#Loads Supreme JSON website into an object
+stock = requests.get("https://www.supremenewyork.com/mobile_stock.json").json() 
+sesh = requests.Session()
+
+#We only want to iterate through the necessary category to save time
+items = stock["products_and_categories"][category]
 
 #Finds the item_id to open the item's variants
-index = 0
 item_id = 0
-for i in items:
+
+for index, item in enumerate(items, start=0):
         if(itm_name in items[index]["name"]):
-                item_id = i['id']
+                item_id = item['id']
                 break
-        index += 1
 
 #Gets the item variants from the mobile website
 item_variants = requests.get(f'https://www.supremenewyork.com/shop/{item_id}.json').json()
@@ -58,12 +44,14 @@ for sty in styles:
         if sty['name'] == color:
                 sizes = sty['sizes']
                 for siz in sizes:
-                        if siz['name'] == size:
+                        if siz['name'] == size and size != '':
+                                size_id = siz['id']
+                                break
+                        elif size == '':
                                 size_id = siz['id']
                                 break
                 style_id = sty['id']
                 break
-
 
 atc_url = f"https://www.supremenewyork.com/shop/{item_id}/add.json"
 headers = {
@@ -87,11 +75,7 @@ data = {
         "qty": "1" 
 }
 
-atc_post = sesh.post(atc_url, headers=headers, data=data)
-cookies = atc_post.cookies
-if atc_post.json():
-        if atc_post.json()['cart'][0]["in_stock"]:
-                print(colored("Added to Cart", "blue"))
+cookies = sesh.post(atc_url, headers=headers, data=data).cookies
 
 driver = webdriver.Chrome()
 driver.get('https://www.supremenewyork.com')
@@ -137,8 +121,8 @@ driver.find_element_by_xpath("//select[@name='credit_card[year]']/option[text()=
 driver.find_element_by_id('orcer').send_keys('your_cvv')
 
 #Find checkboxes
-#checks = driver.find_elements_by_class_name("icheckbox_minimal")
-#checks[1].click()
+checks = driver.find_elements_by_class_name("icheckbox_minimal")
+checks[1].click()
 
 #Checkout
 #driver.find_element_by_xpath("//input[@value='process payment']").click()
