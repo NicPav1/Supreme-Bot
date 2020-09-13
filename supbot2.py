@@ -1,4 +1,3 @@
-import selenium
 import json
 import time
 import requests
@@ -43,7 +42,10 @@ for sty in styles:
         if sty['name'] == color:
                 sizes = sty['sizes']
                 for siz in sizes:
-                        if siz['name'] == size:
+                        if siz['name'] == size and size != '':
+                                size_id = siz['id']
+                                break
+                        elif size == '':
                                 size_id = siz['id']
                                 break
                 style_id = sty['id']
