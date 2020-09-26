@@ -79,6 +79,7 @@ cookies = sesh.post(atc_url, headers=headers, data=data).cookies
 
 option = webdriver.ChromeOptions()
 option.add_argument("--disable-blink-features=AutomationControlled")
+option.headless = True # Option to open up chrome in headless mode, better performance by an average of 3 sec.
 driver = webdriver.Chrome(options=option)
 #driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 #driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
