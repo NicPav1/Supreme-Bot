@@ -96,7 +96,7 @@ WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "order[
 driver.find_element_by_id('order_email').send_keys('your_email')
 
 #Enter phone number
-driver.find_element_by_id('order_tel').send_keys('your_phone_number')
+driver.execute_script("document.getElementById('order_tel').value = 'your_phone_number';")
 
 #Enter street address
 driver.find_element_by_id('bo').send_keys('your_street_address')
@@ -114,7 +114,7 @@ driver.find_element_by_id('order_billing_city').send_keys('your_city')
 driver.find_element_by_xpath("//select[@name='order[billing_state]']/option[text()='VA']").click()
 
 #Enter credit card number
-driver.find_element_by_id('rnsnckrn').send_keys('your_card_number')
+driver.execute_script("document.getElementById('rnsnckrn').value = 'your_card_number';")
 
 #Select expiration month
 driver.find_element_by_xpath("//select[@name='credit_card[month]']/option[text()='01']").click()
