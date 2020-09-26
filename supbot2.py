@@ -78,6 +78,9 @@ data = {
 cookies = sesh.post(atc_url, headers=headers, data=data).cookies
 
 driver = webdriver.Chrome()
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
+
 driver.get('https://www.supremenewyork.com')
 for x, y in zip(list(cookies.keys()), list(cookies.values())):
         driver.add_cookie({'name': x, 'value': y})
@@ -125,4 +128,4 @@ checks = driver.find_elements_by_class_name("icheckbox_minimal")
 checks[1].click()
 
 #Checkout
-#driver.find_element_by_xpath("//input[@value='process payment']").click()
+driver.find_element_by_xpath("//input[@value='process payment']").click()
