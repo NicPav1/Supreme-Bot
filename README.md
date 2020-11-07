@@ -17,6 +17,8 @@ How it works:
 3) I would like the user to be able to start the bot in advance; currently you have to start the bot once the website goes live.
 4) I would like the bot to re-run itself if there are errors in finding the item or checking out.
 
+Please feel free to Fork the project and contribute :)
+
 
 ## HOW TO RUN
 1) Create a new local directory and clone this repo into it
